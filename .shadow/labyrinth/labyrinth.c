@@ -76,10 +76,9 @@ void printUsage() {
     printf("Note: --move and --version only accept long form options\n");
 }
 
-bool isValidPlayer(char playerId) {
-    // TODO: Implement this function
+bool isValidPlayer(char* playerId) {
     const char *validPlayers = "0123456789";
-    return strchr(validPlayers, playerId) != NULL;
+    return strlen(playerId) == 1 && strchr(validPlayers, playerId[0]) != NULL;
 }
 
 bool loadMap(Labyrinth *labyrinth, const char *filename) {
