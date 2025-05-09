@@ -21,6 +21,7 @@ int main(int argc, char *argv[]) {
     int opt;
     int option_index = 0;
     CmdArgs cmdArgs = {0};
+    char mapfilePath[PATH_MAX];
 
     static struct option long_options[] = {
         {"map", required_argument, 0, 'm'},
@@ -34,7 +35,6 @@ int main(int argc, char *argv[]) {
     while ((opt = getopt_long(argc, argv, "m:p:", long_options, &option_index)) != -1) {
         switch (opt) {
             case 'm':
-                char mapfilePath[PATH_MAX];
                 joinPath(mapfilePath, sizeof(mapfilePath), PROJECT_ROOT, (const char *[]){"maps", optarg});
                 if (!file_exists(mapfilePath)) {
                     printf("Map file does not exist: %s\n", mapfilePath);
