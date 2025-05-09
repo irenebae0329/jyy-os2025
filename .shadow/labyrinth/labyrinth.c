@@ -60,7 +60,7 @@ bool isValidPlayer(char playerId) {
 
 bool loadMap(Labyrinth *labyrinth, const char *filename) {
     // TODO: Implement this function
-    const char *map_base_path = ;
+    // const char *map_base_path = ;
     return false;
 }
 
