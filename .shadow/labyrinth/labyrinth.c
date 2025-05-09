@@ -8,35 +8,47 @@
 #include "labyrinth.h"
 #include "util.h"
 
-#define BASE_DIR __FILE__
+typedef struct {
+    char playerId;
+    char *mapFile;
+    char *direction;
+    int collectedParamsNum;
+} CmdArgs;
+
 int main(int argc, char *argv[]) {
     // TODO: Implement this function
     int opt;
     int option_index = 0;
-    const char *map_base_path = NULL;
-    printf("BASE_DIR: %s\n", BASE_DIR);
-    // static struct option long_options[] = {
-    //     {"map", required_argument, 0, 'm'},
-    //     {"player", required_argument, 0, 'p'},
-    //     {"move", required_argument, 0, 'd'},
-    //     {"version", no_argument, 0, 'v'},
-    //     {0, 0, 0, 0}
-    // };
+    CmdArgs cmdArgs = {0};
+
+    static struct option long_options[] = {
+        {"map", required_argument, 0, 'm'},
+        {"player", required_argument, 0, 'p'},
+        {"move", required_argument, 0, 'd'},
+        {"version", no_argument, 0, 'v'},
+        {0, 0, 0, 0}
+    };
+
+    printf("PROJECT_ROOT: %s\n", PROJECT_ROOT);
     
     // while ((opt = getopt_long(argc, argv, "m:p:", long_options, &option_index)) != -1) {
     //     switch (opt) {
     //         case 'm':
-    //             char *map_file = optarg;
+    //             char *mapfile = optarg;
+    //             joinPath(cmdArgs.mapFile, sizeof(cmdArgs.mapFile), PROJECT_ROOT, mapfile);
     //             break;
     //         case 'p':
-    //             char *player_id = optarg;
+    //             cmdArgs.playerId = optarg;
     //             break;
     //         case 'd':
-    //             char *direction = optarg;
+    //             cmdArgs.direction = optarg;
     //             break;
     //         case 'v':
     //             printUsage();
     //             return 0;
+    //         default:
+    //             printUsage();
+    //             return 1;
     //     }
     // }
 
