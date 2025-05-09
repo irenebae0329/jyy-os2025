@@ -42,6 +42,7 @@ int main(int argc, char *argv[]) {
                     return 1;
                 }
                 cmdArgs.mapFile = mapfilePath;
+                cmdArgs.collectedParamsNum++;
                 break;
             case 'p':
                 if (strlen(optarg) != 1 || !isValidPlayer(optarg[0])) {
@@ -50,9 +51,11 @@ int main(int argc, char *argv[]) {
                     return 1;
                 }
                 cmdArgs.playerId = optarg[0];
+                cmdArgs.collectedParamsNum++;
                 break;
             case 'd':
                 cmdArgs.direction = optarg;
+                cmdArgs.collectedParamsNum++;
                 break;
             case 'v':
                 printUsage();
@@ -61,6 +64,10 @@ int main(int argc, char *argv[]) {
                 printUsage();
                 return 1;
         }
+    }
+    if (cmdArgs.collectedParamsNum <= 2) {
+        printUsage();
+        return 1;
     }
 
     
