@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
         {0, 0, 0, 0}
     };
 
-    joinPath(mapfilePath, sizeof(mapfilePath), PROJECT_ROOT, (const char *[]){"maps"});
+    joinPath(mapfilePath, sizeof(mapfilePath), PROJECT_ROOT, (const char *[]){"maps", "map1.txt"});
     printf("mapfilePath: %s\n", mapfilePath);
 
     
