@@ -3,12 +3,44 @@
 #include <string.h>
 #include <stdbool.h>
 #include <assert.h>
+#include <getopt.h>
 #include <testkit.h>
 #include "labyrinth.h"
+#include "util.h"
 
+#define BASE_DIR __FILE__
 int main(int argc, char *argv[]) {
     // TODO: Implement this function
-    printf("Hello, World!\n");
+    int opt;
+    int option_index = 0;
+    const char *map_base_path = NULL;
+    printf("BASE_DIR: %s\n", BASE_DIR);
+    // static struct option long_options[] = {
+    //     {"map", required_argument, 0, 'm'},
+    //     {"player", required_argument, 0, 'p'},
+    //     {"move", required_argument, 0, 'd'},
+    //     {"version", no_argument, 0, 'v'},
+    //     {0, 0, 0, 0}
+    // };
+    
+    // while ((opt = getopt_long(argc, argv, "m:p:", long_options, &option_index)) != -1) {
+    //     switch (opt) {
+    //         case 'm':
+    //             char *map_file = optarg;
+    //             break;
+    //         case 'p':
+    //             char *player_id = optarg;
+    //             break;
+    //         case 'd':
+    //             char *direction = optarg;
+    //             break;
+    //         case 'v':
+    //             printUsage();
+    //             return 0;
+    //     }
+    // }
+
+    
     return 0;
 }
 
@@ -18,6 +50,7 @@ void printUsage() {
     printf("  labyrinth -m map.txt -p id\n");
     printf("  labyrinth --map map.txt --player id --move direction\n");
     printf("  labyrinth --version\n");
+    printf("Note: --move and --version only accept long form options\n");
 }
 
 bool isValidPlayer(char playerId) {
@@ -27,6 +60,7 @@ bool isValidPlayer(char playerId) {
 
 bool loadMap(Labyrinth *labyrinth, const char *filename) {
     // TODO: Implement this function
+    const char *map_base_path = ;
     return false;
 }
 
