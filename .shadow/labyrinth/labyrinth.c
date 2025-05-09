@@ -38,7 +38,6 @@ int main(int argc, char *argv[]) {
                 joinPath(mapfilePath, sizeof(mapfilePath), PROJECT_ROOT, (const char *[]){"maps", optarg});
                 if (!file_exists(mapfilePath)) {
                     printf("Map file does not exist: %s\n", mapfilePath);
-                    printUsage();
                     return 1;
                 }
                 cmdArgs.mapFile = mapfilePath;
@@ -47,7 +46,6 @@ int main(int argc, char *argv[]) {
             case 'p':
                 if (strlen(optarg) != 1 || !isValidPlayer(optarg[0])) {
                     printf("Invalid player ID: %s\n", optarg);
-                    printUsage();
                     return 1;
                 }
                 cmdArgs.playerId = optarg[0];
@@ -65,9 +63,14 @@ int main(int argc, char *argv[]) {
                 return 1;
         }
     }
-    if (cmdArgs.collectedParamsNum <= 2) {
+    if(cmdArgs.collectedParamsNum == 0 || cmdArgs.collectedParamsNum == 1) {
         printUsage();
         return 1;
+    }else if(cmdArgs.collectedParamsNum == 2) {
+        if(cmdArgs.direction != NULL) {
+            printUsage();
+            return 1;
+        }
     }
 
     
@@ -75,6 +78,7 @@ int main(int argc, char *argv[]) {
 }
 
 void printUsage() {
+    printf("Labyrinth Game\n");
     printf("Usage:\n");
     printf("  labyrinth --map map.txt --player id\n");
     printf("  labyrinth -m map.txt -p id\n");
