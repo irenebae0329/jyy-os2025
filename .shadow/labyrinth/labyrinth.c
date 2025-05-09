@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
     };
 
     joinPath(mapfilePath, sizeof(mapfilePath), PROJECT_ROOT, (const char *[]){"maps", "map1.txt"});
-    printf("mapfilePath: %s\n", mapfilePath);
+    // printf("mapfilePath: %s\n", mapfilePath);
 
     
     // while ((opt = getopt_long(argc, argv, "m:p:", long_options, &option_index)) != -1) {
