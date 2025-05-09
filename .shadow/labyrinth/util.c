@@ -12,8 +12,8 @@ void joinPath(char *dst, size_t size, const char *dir, const char *filenames[]) 
             snprintf(dst, size, "%s%s", dir, filename);
         else
             snprintf(dst, size, "%s/%s", dir, filename);
+        printf("dst: %s\n", dst);
     }
-    printf("dst: %s\n", dst);
 }
 
 bool file_exists(const char *filename) {
