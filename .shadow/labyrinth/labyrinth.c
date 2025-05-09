@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <assert.h>
 #include <getopt.h>
+#include <limits.h>
 #include <testkit.h>
 #include "labyrinth.h"
 #include "util.h"
@@ -29,28 +30,38 @@ int main(int argc, char *argv[]) {
         {0, 0, 0, 0}
     };
 
-    printf("PROJECT_ROOT: %s\n", PROJECT_ROOT);
     
-    // while ((opt = getopt_long(argc, argv, "m:p:", long_options, &option_index)) != -1) {
-    //     switch (opt) {
-    //         case 'm':
-    //             char *mapfile = optarg;
-    //             joinPath(cmdArgs.mapFile, sizeof(cmdArgs.mapFile), PROJECT_ROOT, mapfile);
-    //             break;
-    //         case 'p':
-    //             cmdArgs.playerId = optarg;
-    //             break;
-    //         case 'd':
-    //             cmdArgs.direction = optarg;
-    //             break;
-    //         case 'v':
-    //             printUsage();
-    //             return 0;
-    //         default:
-    //             printUsage();
-    //             return 1;
-    //     }
-    // }
+    while ((opt = getopt_long(argc, argv, "m:p:", long_options, &option_index)) != -1) {
+        switch (opt) {
+            case 'm':
+                char mapfilePath[PATH_MAX];
+                joinPath(mapfilePath, sizeof(mapfilePath), PROJECT_ROOT, (const char *[]){"maps", optarg});
+                if (!file_exists(mapfilePath)) {
+                    printf("Map file does not exist: %s\n", mapfilePath);
+                    printUsage();
+                    return 1;
+                }
+                cmdArgs.mapFile = mapfilePath;
+                break;
+            case 'p':
+                if (!isValidPlayer(optarg)) {
+                    printf("Invalid player ID: %s\n", optarg);
+                    printUsage();
+                    return 1;
+                }
+                cmdArgs.playerId = optarg;
+                break;
+            case 'd':
+                cmdArgs.direction = optarg;
+                break;
+            case 'v':
+                printUsage();
+                return 0;
+            default:
+                printUsage();
+                return 1;
+        }
+    }
 
     
     return 0;
@@ -67,7 +78,8 @@ void printUsage() {
 
 bool isValidPlayer(char playerId) {
     // TODO: Implement this function
-    return false;
+    const char *validPlayers = "0123456789";
+    return strchr(validPlayers, playerId) != NULL;
 }
 
 bool loadMap(Labyrinth *labyrinth, const char *filename) {
