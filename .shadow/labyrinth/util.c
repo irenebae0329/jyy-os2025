@@ -6,13 +6,12 @@
 void joinPath(char *dst, size_t size, const char *dir, const char *filenames[]) {
     if (dir == NULL || filenames == NULL || dst == NULL) return;
     size_t len = strlen(dir);
-    for(int i = 0; i < sizeof(filenames); i++) {
+    for(int i = 0; filenames[i] != NULL; i++) {
         char *filename = filenames[i];
-        printf("filename: %s\n", filename);
-        // if (len > 0 && dir[len-1] == '/')
-        //     snprintf(dst, size, "%s%s", dir, filename);
-        // else
-        //     snprintf(dst, size, "%s/%s", dir, filename);
+        if (len > 0 && dir[len-1] == '/')
+            snprintf(dst, size, "%s%s", dir, filename);
+        else
+            snprintf(dst, size, "%s/%s", dir, filename);
     }
 }
 
