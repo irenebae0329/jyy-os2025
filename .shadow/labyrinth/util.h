@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-void joinPath(char *dst, size_t size, const char *dir, const char *filenames[]);
+void joinPath(char *dst, size_t size, const char *dir, char *filenames);
 bool file_exists(const char *filename);
 #endif
 
