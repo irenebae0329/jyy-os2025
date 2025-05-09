@@ -2,6 +2,10 @@
 #define MAX_COLS 100
 #define VERSION_INFO "Labyrinth Game"
 
+#ifndef PROJECT_ROOT
+#define PROJECT_ROOT ""
+#endif
+
 typedef struct {
     char map[MAX_ROWS][MAX_COLS];
     int rows;
@@ -13,7 +17,7 @@ typedef struct {
     int col;
 } Position;
 
-
+void printUsage();
 bool isValidPlayer(char playerId);
 bool loadMap(Labyrinth *labyrinth, const char *filename);
 Position findPlayer(Labyrinth *labyrinth, char playerId);
