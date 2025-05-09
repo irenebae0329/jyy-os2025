@@ -44,12 +44,12 @@ int main(int argc, char *argv[]) {
                 cmdArgs.mapFile = mapfilePath;
                 break;
             case 'p':
-                if (!isValidPlayer(optarg)) {
+                if (strlen(optarg) != 1 || !isValidPlayer(optarg[0])) {
                     printf("Invalid player ID: %s\n", optarg);
                     printUsage();
                     return 1;
                 }
-                cmdArgs.playerId = optarg;
+                cmdArgs.playerId = optarg[0];
                 break;
             case 'd':
                 cmdArgs.direction = optarg;
@@ -76,9 +76,10 @@ void printUsage() {
     printf("Note: --move and --version only accept long form options\n");
 }
 
-bool isValidPlayer(char* playerId) {
+bool isValidPlayer(char playerId) {
+    // TODO: Implement this function
     const char *validPlayers = "0123456789";
-    return strlen(playerId) == 1 && strchr(validPlayers, playerId[0]) != NULL;
+    return strchr(validPlayers, playerId) != NULL;
 }
 
 bool loadMap(Labyrinth *labyrinth, const char *filename) {
