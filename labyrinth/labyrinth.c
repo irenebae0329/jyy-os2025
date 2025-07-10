@@ -9,6 +9,12 @@
 #include "labyrinth.h"
 #include "util.h"
 
+#define COMMAND_TYPE_MAP 10
+#define COMMAND_TYPE_MOVE 11
+#define COMMAND_TYPE_VERSION 12
+#define OPERATION_SUCCESS 1
+#define OPERATION_FAILED 0
+#define INVALID_PLAYER_ID 'X'
 typedef struct {
     char playerId;
     char *mapFile;
@@ -16,13 +22,21 @@ typedef struct {
     int collectedParamsNum;
 } CmdArgs;
 
+typedef struct {
+    int firstEmptyPlace[2];
+    int emptyPlacesNum;
+} LabyrinthInfo;
+
 int main(int argc, char *argv[]) {
     // TODO: Implement this function
     int opt;
     int option_index = 0;
     CmdArgs cmdArgs = {0};
     char mapfilePath[PATH_MAX];
+    Labyrinth labyrinth = {0};
+    LabyrinthInfo labyrinthInfo = {0};
 
+    int commandType = COMMAND_TYPE_MAP;
     static struct option long_options[] = {
         {"map", required_argument, 0, 'm'},
         {"player", required_argument, 0, 'p'},
@@ -38,40 +52,56 @@ int main(int argc, char *argv[]) {
                 joinPath(mapfilePath, sizeof(mapfilePath), PROJECT_ROOT, (const char *[]){"maps", optarg},2);
                 if (!file_exists(mapfilePath)) {
                     printf("Map file does not exist: %s\n", mapfilePath);
-                    return 1;
+                    return OPERATION_FAILED;
                 }
                 cmdArgs.mapFile = mapfilePath;
-                cmdArgs.collectedParamsNum++;
+                commandType = COMMAND_TYPE_MAP;
                 break;
             case 'p':
                 if (strlen(optarg) != 1 || !isValidPlayer(optarg[0])) {
-                    printf("Invalid player ID: %s\n", optarg);
-                    return 1;
+                    cmdArgs.playerId = INVALID_PLAYER_ID;
+                } else {
+                    cmdArgs.playerId = optarg[0];
                 }
-                cmdArgs.playerId = optarg[0];
-                cmdArgs.collectedParamsNum++;
+                commandType = COMMAND_TYPE_MAP;
                 break;
             case 'd':
                 cmdArgs.direction = optarg;
-                cmdArgs.collectedParamsNum++;
+                commandType = COMMAND_TYPE_MOVE;
                 break;
             case 'v':
-                printUsage();
-                return 0;
+                commandType = COMMAND_TYPE_VERSION;
+                break;
             default:
                 printUsage();
-                return 1;
+                return OPERATION_FAILED;
         }
     }
-    if(cmdArgs.collectedParamsNum == 0 || cmdArgs.collectedParamsNum == 1) {
-        printUsage();
-        return 1;
-    }else if(cmdArgs.collectedParamsNum == 2) {
-        if(cmdArgs.direction != NULL) {
-            printUsage();
-            return 1;
-        }
+
+    switch(commandType) {
+        case COMMAND_TYPE_VERSION:
+            if(cmdArgs.collectedParamsNum != 0) {
+                printUsage();
+                return OPERATION_FAILED;
+            }
+            printVersion();
+            return OPERATION_SUCCESS;
+        case COMMAND_TYPE_MAP:
+            if(cmdArgs.collectedParamsNum != 2) {
+                printUsage();
+                return OPERATION_FAILED;
+            }
+            break;
+        case COMMAND_TYPE_MOVE:
+            if(cmdArgs.collectedParamsNum != 3) {
+                printUsage();
+                return OPERATION_FAILED;
+            }
+            break;
     }
+
+
+        
 
     
     return 0;
@@ -96,7 +126,31 @@ bool isValidPlayer(char playerId) {
 bool loadMap(Labyrinth *labyrinth, const char *filename) {
     // TODO: Implement this function
     // const char *map_base_path = ;
-    return false;
+    FILE *file = fopen(filename, "r");
+    if(!file) {
+        printf("Failed to open map file: %s\n", filename);
+        return false;
+    }
+    char line[MAX_COLS];
+    int row = 0;
+    int col = 0;
+    while(fgets(line, sizeof(line), file)) {
+        if(line[strlen(line) - 1] == '\n') {
+            line[strlen(line) - 1] = '\0';
+        }
+        if(row == 0) {
+            col = strlen(line);
+        }
+        for(int i = 0; i < col; i++) {
+            labyrinth->map[row][i] = line[i];
+        }
+        row++;
+    }
+    labyrinth->rows = row;
+    labyrinth->cols = col;
+    fclose(file);
+    
+    return true;
 }
 
 Position findPlayer(Labyrinth *labyrinth, char playerId) {
